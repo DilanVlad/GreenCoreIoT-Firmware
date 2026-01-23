@@ -6,7 +6,7 @@
 const char* ssid = "INNO-";
 const char* password = "pass";
 
-// ================== API ==================
+// ================== ENDPOINT ==================
 const char* serverUrl = "https://bq1skqgh-7278.use2.devtunnels.ms/api/Lecturas";
 
 // ================== SLOTS FIJOS ==================
