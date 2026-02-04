@@ -38,7 +38,7 @@ void setup() {
     Serial.print(".");
   }
 
-  Serial.println("\n✅ WiFi conectado");
+  Serial.println("\nWiFi conectado");
   Serial.print("IP: ");
   Serial.println(WiFi.localIP());
 }
@@ -76,7 +76,7 @@ void loop() {
     enviarLectura(SLOT_1, "LUX", luz1);         // Luminosidad
     enviarLectura(SLOT_1, "HUMC", humCanopia1); // Humedad Canopia
   } else {
-    Serial.println("⚠️ Error leyendo DHT11 en Slot 1");
+    Serial.println("Error leyendo DHT11 en Slot 1");
   }
 
   // ==========================================
@@ -122,14 +122,14 @@ void enviarLectura(int slot, String idVar, float valor) {
   int httpCode = http.POST(json);
 
   if (httpCode > 0) {
-    Serial.printf("✅ Éxito (HTTP %d)\n", httpCode);
+    Serial.printf("Éxito (HTTP %d)\n", httpCode);
   } else {
-    Serial.printf("❌ Error: %s\n", http.errorToString(httpCode).c_str());
+    Serial.printf("Error: %s\n", http.errorToString(httpCode).c_str());
   }
 
   http.end();
 }
 
 void revealError(String msg) {
-  Serial.println("❌ " + msg);
+  Serial.println("Error: " + msg);
 }
