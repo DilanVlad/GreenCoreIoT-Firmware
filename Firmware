@@ -73,7 +73,7 @@ void loop() {
     enviarLectura(SLOT_1, "HUMC", humCan1);
 
   } else {
-    Serial.println("❌ Error leyendo DHT11 en Slot 1");
+    Serial.println(" Error leyendo DHT11 en Slot 1");
   }
 
   // ==========================================
@@ -102,7 +102,7 @@ void loop() {
 void enviarLectura(int slot, String idVar, float valor) {
 
   if (WiFi.status() != WL_CONNECTED) {
-    Serial.println("⚠️ WiFi desconectado");
+    Serial.println(" WiFi desconectado");
     return;
   }
 
@@ -116,7 +116,7 @@ void enviarLectura(int slot, String idVar, float valor) {
   json += "\"valorLec\":" + String(valor, 2);
   json += "}";
 
-  Serial.print("📤 Enviando [Slot ");
+  Serial.print(" Enviando [Slot ");
   Serial.print(slot);
   Serial.print(" - ");
   Serial.print(idVar);
