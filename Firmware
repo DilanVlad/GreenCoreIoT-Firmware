@@ -82,7 +82,25 @@ void loop() {
   // ==========================================
 
   float temp2   = random(50, 280) / 10.0;   // 5 – 28 °C
-  float humAmb2 = random(400, 900) / 10.0;  // 40 – 90 %
+
+  
+  float humAmb2;
+  int probAlerta = random(0, 100); // 0–99
+  
+  if (probAlerta < 20) {
+    // 20% del tiempo FUERA de rango
+    if (random(0, 2) == 0) {
+      humAmb2 = random(150, 390) / 10.0; // 15 – 39 %
+    } else {
+      humAmb2 = random(910, 980) / 10.0; // 91 – 98 %
+    }
+  } else {
+    // 80% del tiempo DENTRO de rango
+    humAmb2 = random(400, 900) / 10.0;   // 40 – 90 %
+  }
+
+
+
   float humSoil2 = random(30, 90);           // 30 – 90 %
   float humCan2 = random(400, 900) / 10.0;  // 40 – 90 %
   float luz2    = random(200, 9000);         // Lux (sin rango definido)
