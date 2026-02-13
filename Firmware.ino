@@ -3,11 +3,11 @@
 #include <DHT.h>
 
 // ================== CONFIGURACIÓN WIFI ==================
-const char* ssid = "INNO-RED";     
-const char* password = "password";
+const char* ssid = "GreenCore";     
+const char* password = "green1234";
 
 // ================== ENDPOINT ==================
-const char* serverUrl = "https://bq1skqgh-7278.use2.devtunnels.ms/api/Lecturas";
+const char* serverUrl = "https://bq1skqgh-7043.use2.devtunnels.ms/api/Lecturas";
 
 // ================== SLOTS ==================
 #define SLOT_1 1   // MES-001 (Mesa 1)
@@ -93,8 +93,12 @@ void procesarMesa1() {
   humSoil = constrain(humSoil, 0, 100);
 
   int rawLdr = analogRead(M1_LDR_PIN);
-  // el valor: 4095 es oscuro, 0 es mucha luz
-  int luz = map(rawLdr, 4095, 0, 0, 10000); 
+  
+  // === CAMBIO REALIZADO AQUI ===
+  // Antes: map(rawLdr, 4095, 0, 0, 10000);
+  // Ahora: map(rawLdr, 0, 4095, 0, 10000);
+  // Lógica: 0 (Bajo) = 0 (Oscuro). 4095 (Alto) = 10000 (Claro).
+  int luz = map(rawLdr, 0, 4095, 0, 10000); 
   luz = constrain(luz, 0, 10000);
 
   // 2. Validación y Envío
@@ -132,8 +136,14 @@ void procesarMesa2() {
 
   // Lógica Digital para Luz Mesa 2
   int estadoLuz = digitalRead(M2_LDR_PIN); 
-  // 0 = Claro, 1 = Oscuro
+  
+  // Si tu sensor digital envía 0 cuando hay LUZ:
+  // 0 = Claro (Valor alto 1000)
+  // 1 = Oscuro (Valor bajo 0)
   int luz = (estadoLuz == 0) ? 1000 : 0; 
+  
+  // NOTA: Si ves que la Mesa 2 también va al revés, cambia la linea de arriba por:
+  // int luz = (estadoLuz == 1) ? 1000 : 0; 
 
   // 2. Validación y Envío
   if (isnan(temp) || isnan(humAmb)) {
@@ -160,6 +170,7 @@ void enviarLectura(int slot, String idVar, float valor) {
   
   HTTPClient http;
   http.begin(serverUrl);
+  http.setTimeout(5000); 
   http.addHeader("Content-Type", "application/json");
 
   // Crear JSON
@@ -179,7 +190,7 @@ void enviarLectura(int slot, String idVar, float valor) {
 
   if (httpCode > 0) {
     Serial.printf("OK (HTTP %d)\n", httpCode);
-  } else {
+  } else { 
     Serial.printf("ERROR: %s\n", http.errorToString(httpCode).c_str());
   }
 
